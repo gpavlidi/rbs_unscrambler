@@ -1,11 +1,11 @@
 require 'rbs_unscrambler/version'
 require 'crypt/blowfish'
 
-class RbsUnscrambler
+module RbsUnscrambler
   RBS_HEADER = 'RBS1.0'
   BLOCK_SIZE = 8
 
-  def initialize(filename, password)
+  def unscramble(filename, password)
     @blowfish = Crypt::Blowfish.new(password)
     @unscrambled_rbs = ''
 
@@ -13,9 +13,7 @@ class RbsUnscrambler
       read_header( file )
       @unscrambled_rbs += read_encrypted_record( file ) until file.eof?
     end
-  end
 
-  def unscramble
     @unscrambled_rbs
   end
 
@@ -55,5 +53,10 @@ class RbsUnscrambler
 
     decrypted
   end
+
+  module_function :unscramble
+  module_function :read_header
+  module_function :read_encrypted_record
+  module_function :read_encrypted_block
 
 end
